@@ -14,7 +14,12 @@ app.use(cookieParser());
 // }));
 
 
-app.use("/test", testRoute);
+// app.use("/test", testRoute);
+
+// main routing
+const authRoutes = require('./routes/auth');
+
+app.use('/api/auth', authRoutes);
 
 // handle 404
 app.use((req, res, next) => {
