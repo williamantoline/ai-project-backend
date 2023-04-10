@@ -1,5 +1,15 @@
 const model = require("../models/index");
 const bycrpt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+
+const getUser = async (email) => {
+    const user = await model.users.findOne({
+        where: {
+            email: email,
+        }
+    });
+    return user;
+}
 
 const register = async (req, res) => {
     try {
@@ -20,7 +30,40 @@ const register = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    // 
+    try{
+        const { email, password } = req.body;
+        let user = await getUser(email);
+
+        if(!user) {
+            return res.status(403).json({
+                message: 'invalid credentials',
+                error: 'invalid login',
+            });
+        }
+
+        const status = await bycrpt.compare(password, user.password);
+        if(!status) {
+            return res.status(403).json({
+                message: 'invalid credentials',
+                error: 'invalid login',
+            });
+        }
+
+        const token = jwt.sign(user.toJSON(), process.env.JWT_KEY, { expiresIn: "24h" });
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "None",
+        });
+
+        return res.json({
+            token: token,
+        });
+
+    } catch(err) {
+        res.status(500).end();
+    }
 }
 
-module.exports = { register }
+module.exports = { register, login };
