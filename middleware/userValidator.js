@@ -4,10 +4,10 @@ const model = require('../models/index');
 exports.validateUser = [
     check('name')
         .notEmpty()
-        .withMessage('Name is required').bail()
+        .withMessage('Name is required')
         .isLength({ min: 3, max: 255 })
         .withMessage('Name must have minimum length of 3').bail()
-        .isAlpha()
+        .isAlpha('en-US', {ignore: '\s'})
         .withMessage('Name should only contain letters').bail(),
     check('email')
         .notEmpty()
@@ -24,12 +24,12 @@ exports.validateUser = [
         .notEmpty()
         .withMessage('Password is required').bail()
         .isLength({ min: 8, max: 255 })
-        .withMessage('Password must have minimum length of 8'),
+        .withMessage('Password must have minimum length of 8').bail(),
     (req, res, next) => {
         const errors = validationResult(req);
         if(!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
         next();
-    }
+    },
 ]

@@ -1,12 +1,15 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const testRoute = require("./routes/test");
 
 
 const app = express();
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // app.use(cors({
 //     credentials: true,
@@ -15,6 +18,15 @@ app.use(cookieParser());
 
 
 // app.use("/test", testRoute);
+const db = require("./models");
+
+db.sequelize.sync()
+    .then(() => {
+        console.log("Synced db.");
+    })
+    .catch((err) => {
+        console.log("Failed to sync db: " + err.message);
+    });
 
 // main routing
 const authRoutes = require('./routes/auth');

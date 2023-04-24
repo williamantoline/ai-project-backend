@@ -13,7 +13,7 @@ const getUser = async (email) => {
 
 const register = async (req, res) => {
     try {
-        const {name, email, password} = req.body;
+        const { name, email, password } = req.body;
         const saltRounds = 10;
         bycrpt.hash(password,saltRounds, async (err, password) => {
             if(err) {
