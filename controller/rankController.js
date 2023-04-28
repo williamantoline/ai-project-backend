@@ -6,9 +6,9 @@ const getLeaderBoards = async (req, res) => {
         await User.update({ isMe : false }, { where : { isMe : true } });
 
         if(req.user) {
-            await User.update({ isMe : true }, { where : { id : req.user.id } })
+            await User.update({ isMe : true }, { where : { id : req.user.id } });
         }
-        
+
         const topTen = await User.findAll({
             attributes: { exclude: ['password'] },
             order: [['score', 'DESC']],
