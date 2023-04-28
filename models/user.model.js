@@ -22,6 +22,16 @@ module.exports = (sequelize, Sequelize) => {
         password: {
             type: Sequelize.STRING(255),
             allowNull: false,
+        },
+        score: {
+            type: Sequelize.INTEGER(),
+            default: 0,
+            allowNull: false,
+        },
+        isMe: {
+            type: Sequelize.BOOLEAN(),
+            default: false,
+            allowNull: false,
         }
     });
     return User;
