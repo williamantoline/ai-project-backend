@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 //     credentials: true,
 //     origin: "http://localhost:3000",
 // }));
-
+app.use(cors());
 
 // app.use("/test", testRoute);
 const db = require("./models");
