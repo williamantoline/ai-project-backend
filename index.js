@@ -34,6 +34,7 @@ const leaderboardRoutes = require('./routes/leaderboard');
 const scoreRoutes = require('./routes/score');
 const { getUser } = require('./middleware/authMid');
 
+app.use('/api/test', testRoute);
 app.use('/api/auth', authRoutes);
 app.use('/api', getUser, leaderboardRoutes);
 app.use('/api', getUser, scoreRoutes);
