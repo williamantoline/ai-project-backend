@@ -20,7 +20,7 @@ const register = async (req, res) => {
                 return res.send("Gagal melakukan registrasi!").status(400);
             }
             if(password) {
-                await model.users.create({name, email, password, score: 0, isMe: false});
+                await model.users.create({name, email, password, score: 0});
                 return res.send("Berhasil melakukan registrasi!").status(200);
             }
         });

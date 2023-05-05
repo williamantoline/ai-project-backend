@@ -3,12 +3,6 @@ const User = model.users;
 
 const getLeaderBoards = async (req, res) => {
     try {
-        await User.update({ isMe : false }, { where : { isMe : true } });
-
-        if(req.user) {
-            await User.update({ isMe : true }, { where : { id : req.user.id } });
-        }
-
         const topTen = await User.findAll({
             attributes: { exclude: ['password'] },
             order: [['score', 'DESC']],
@@ -20,6 +14,9 @@ const getLeaderBoards = async (req, res) => {
         });
 
     } catch (err) {
+        return res.status(500).json({
+            err: err,
+        });
         return res.status(500).end();
     }
 }

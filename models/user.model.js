@@ -28,11 +28,6 @@ module.exports = (sequelize, Sequelize) => {
             default: 0,
             allowNull: false,
         },
-        isMe: {
-            type: Sequelize.BOOLEAN(),
-            default: false,
-            allowNull: false,
-        }
     });
     return User;
 }
