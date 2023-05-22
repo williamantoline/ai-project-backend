@@ -1,28 +1,23 @@
 const model = require("../models/index");
 const User = model.users;
+const CryptoJs = require("crypto-js");
 
 const updateScore = async (req, res) => {
     try {
-        const { result } = req.body;
-        if(result == 1) point = 2;
-        else if (result == 0) point = 1;
-        else point = 0;
-        if(req.user) {
-            await User.increment('score', { by: point, where: { id : req.user.id } });
-            const user = await User.findAll({
-                where : {
-                    id: req.user.id
-                },
-                attributes: { exclude: ['password'] },
-            });
-            return res.status(200).json({
-                data: user,
+        const {data} = req.body;
+        const dec = CryptoJs.AES.decrypt(data, process.env.ENCKEY).toString(CryptoJs.enc.Utf8);
+        if (dec === '') {
+            return res.status(400).json({
+                message: "invalid request",
             });
         }
-        return res.status(200).json({
-            message: "Need login to update score",
-        })
+
+        const [token, score, ts] = dec.split("--");
+        await User.increment('score', { by: parseInt(score), where: { id : req.user.id } });
+        return res.status(200).end();
+
     } catch (err) {
+        console.log(err);
         return res.status(500).end();
     }
 }
